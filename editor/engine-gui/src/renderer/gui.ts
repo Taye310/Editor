@@ -1,8 +1,37 @@
-import * as path from 'path';
+import * as cp from 'child_process';
 import * as fs from 'fs';
+import * as path from 'path';
 export let run = () => {
     let canvas = document.getElementById("app") as HTMLCanvasElement;
     let stage = engine.run(canvas);
+
+    /**
+     * 设计窗口内预览游戏
+     */
+    let projectUserPick=path.resolve(__dirname,"../../../engine-test-game");
+    console.log(projectUserPick);
+    if(!validProject(projectUserPick)){
+        alert("该文件不是一个有效的游戏项目");
+    }else{
+        let child_process=cp.exec("engine "+"run "+projectUserPick);
+        child_process.stdout.addListener("data",data=>{
+            console.log(data.toString());
+            if(data.toString().indexOf("server listening to")>=0){
+                let iframe=document.getElementById("preview") as HTMLIFrameElement;
+                iframe.src="http://localhost:1337/index.html";
+            }
+        })
+        child_process.stderr.addListener("data",data=>{
+            console.log(data.toString());
+        })
+        child_process.addListener("close",()=>{
+
+        })
+    }
+
+    function validProject(project:string){
+        return true;
+    }
 
     let textField = new engine.TextField();
     textField.text = "Hello,User";
@@ -13,16 +42,13 @@ export let run = () => {
     engine.res.loadConfig("test-project/default.json", () => {
         engine.res.load("test-project/default.json", (data) => {
             let resourceJson = engine.res.get("default.json");
-
             let resource: engine.res.ResourceData[] = JSON.parse(resourceJson)["resource"];
-
             for (let res of resource) {//加载所有资源
                 engine.res.load(res.url, (data) => {
                     console.log(data);
                 });
             }
             setTimeout(function () {
-                console.log(engine.res.get("add.png"))
                 refresh(stage);
             }, 300);
         })
@@ -55,8 +81,6 @@ function refresh(stage: engine.DisplayObjectContainer) {
     let add_Bitmap = new engine.Bitmap();
     let refresh_Bitmap = new engine.Bitmap();
     let save_Bitmap = new engine.Bitmap();
-
-    console.log(engine.res.get("add.png"));
 
     add_Bitmap = engine.res.get("add.png");
     refresh_Bitmap = engine.res.get("shuaxin.png");
@@ -133,8 +157,10 @@ class BookItem extends engine.DisplayObjectContainer {
         //建立文本框
         this.bookTextField = new engine.TextField();
         this.bookTextField.text = this.bookName;
-        // this.bookTextField.x = startX;
-        // this.bookTextField.y = startY;
+        this.bookTextField.x = 10;
+        this.bookTextField.y = 10;
+        this.bookTextField.scaleX=3;
+        this.bookTextField.scaleY=3;
         //建立按钮
         let delete_Bitmap = new engine.Bitmap();
         let change_Bitmap = new engine.Bitmap();
