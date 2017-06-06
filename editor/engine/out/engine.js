@@ -140,6 +140,16 @@ var engine;
             this.listeners.push(listener);
         };
         Ticker.prototype.unregister = function (listener) {
+            var copyListeners = this.listeners;
+            for (var _i = 0, _a = this.listeners; _i < _a.length; _i++) {
+                var currnetListener = _a[_i];
+                if (currnetListener == listener) {
+                    var listenerIndex = this.listeners.indexOf(currnetListener);
+                    copyListeners.splice(listenerIndex, 1);
+                    break;
+                }
+            }
+            this.listeners = copyListeners;
         };
         Ticker.prototype.notify = function (deltaTime) {
             for (var _i = 0, _a = this.listeners; _i < _a.length; _i++) {

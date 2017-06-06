@@ -7,24 +7,12 @@
 </head>
 
 <body>
-    <!--<h1>Hello World!</h1>
-    We are using node
-    <script>
-        document.write(process.versions.node)
-    </script>, Chrome
-    <script>
-        document.write(process.versions.chrome)
-    </script>, and Electron
-    <script>
-        document.write(process.versions.electron)
-    </script>-->
-
     <canvas width="2500" height="1000" id="app"></canvas>
     <script src="../engine/out/engine.js"></script>
     <iframe width="1000" height="1000" id="preview" src=""></iframe>
 
     <script>
-        let gui = require('./lib/renderer/gui.js')
+        let gui = require('./lib/renderer/Scene.js')
         gui.run();
     </script>
 </body>

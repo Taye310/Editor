@@ -31,6 +31,7 @@ export let run = () => {
 
     let iframe = document.getElementById("preview") as HTMLIFrameElement;
     iframe.src = "http://localhost:1337/index.html";
+    //iframe.src = "http://10.0.7.120:3000/index.html";
 
     function validProject(project: string) {
         return true;
