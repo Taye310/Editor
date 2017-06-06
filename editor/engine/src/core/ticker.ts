@@ -29,7 +29,15 @@ namespace engine {
         }
 
         unregister(listener: Ticker_Listener_Type) {
-
+            var copyListeners = this.listeners;
+            for (let currnetListener of this.listeners) {
+                if (currnetListener == listener) {
+                    var listenerIndex = this.listeners.indexOf(currnetListener);
+                    copyListeners.splice(listenerIndex, 1);
+                    break;
+                }
+            }
+            this.listeners = copyListeners;
         }
 
         notify(deltaTime: number) {
